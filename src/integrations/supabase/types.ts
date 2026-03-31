@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      waitlist_agricapital: {
+        Row: {
+          date_inscription: string
+          email: string
+          id: string
+          motivation: string[] | null
+          niveau_projet: string | null
+          nom: string
+          possede_terre: boolean
+          projet_interet: string[] | null
+          souhait_plantation: string | null
+          source: string | null
+          superficie_souhaitee: string | null
+          superficie_terre: number | null
+          timing_projet: string | null
+          ville: string | null
+          whatsapp: string
+          zone: string
+        }
+        Insert: {
+          date_inscription?: string
+          email: string
+          id?: string
+          motivation?: string[] | null
+          niveau_projet?: string | null
+          nom: string
+          possede_terre?: boolean
+          projet_interet?: string[] | null
+          souhait_plantation?: string | null
+          source?: string | null
+          superficie_souhaitee?: string | null
+          superficie_terre?: number | null
+          timing_projet?: string | null
+          ville?: string | null
+          whatsapp: string
+          zone: string
+        }
+        Update: {
+          date_inscription?: string
+          email?: string
+          id?: string
+          motivation?: string[] | null
+          niveau_projet?: string | null
+          nom?: string
+          possede_terre?: boolean
+          projet_interet?: string[] | null
+          souhait_plantation?: string | null
+          source?: string | null
+          superficie_souhaitee?: string | null
+          superficie_terre?: number | null
+          timing_projet?: string | null
+          ville?: string | null
+          whatsapp?: string
+          zone?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
