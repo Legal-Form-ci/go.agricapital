@@ -26,6 +26,7 @@ type Inscription = {
   timing_projet: string | null;
   niveau_projet: string | null;
   source: string | null;
+  pret_daloa: string | null;
   date_inscription: string;
 };
 
