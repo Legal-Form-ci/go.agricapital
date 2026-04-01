@@ -195,6 +195,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                 <TableHead>Motivation</TableHead>
                 <TableHead>Délai</TableHead>
                 <TableHead>Niveau</TableHead>
+                <TableHead>Daloa</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
