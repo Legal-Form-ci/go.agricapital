@@ -91,6 +91,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     Motivation: r.motivation?.join(", ") || "",
     "Délai projet": r.timing_projet || "",
     "Niveau projet": r.niveau_projet || "",
+    "Prêt Daloa": r.pret_daloa || "",
     Source: r.source || "",
     "Date inscription": r.date_inscription,
   }));
