@@ -211,6 +211,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                   <TableCell className="max-w-[200px] truncate">{row.motivation?.join(", ") || "—"}</TableCell>
                   <TableCell className="whitespace-nowrap">{row.timing_projet || "—"}</TableCell>
                   <TableCell className="whitespace-nowrap">{row.niveau_projet || "—"}</TableCell>
+                  <TableCell className="whitespace-nowrap">{row.pret_daloa || "—"}</TableCell>
                 </TableRow>
               ))}
               {filtered.length === 0 && (
