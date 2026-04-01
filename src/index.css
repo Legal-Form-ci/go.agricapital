@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
 @layer base {
   :root {
     --background: 40 33% 98%;
@@ -32,7 +34,7 @@
     --input: 40 15% 88%;
     --ring: 145 63% 28%;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
 
     --sidebar-background: 145 30% 15%;
     --sidebar-foreground: 0 0% 95%;
@@ -81,6 +83,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
   }
 }

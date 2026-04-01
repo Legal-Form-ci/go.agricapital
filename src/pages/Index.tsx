@@ -2,54 +2,67 @@ import { useState } from "react";
 import WaitlistForm from "@/components/WaitlistForm";
 import SuccessMessage from "@/components/SuccessMessage";
 import logoAgricapital from "@/assets/logo-agricapital.png";
+import palmBg from "@/assets/palm-background.jpg";
 
 const Index = () => {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12">
+    <div className="min-h-screen relative">
+      {/* Palm background */}
+      <div
+        className="fixed inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${palmBg})` }}
+      />
+      <div className="fixed inset-0 bg-background/92" />
+
+      <div className="relative z-10 max-w-2xl mx-auto px-4 py-8 sm:py-14">
         {/* Header */}
         <div className="text-center mb-8">
           <img
             src={logoAgricapital}
-            alt="AgriCapital"
-            className="h-20 sm:h-24 mx-auto mb-6"
+            alt="AgriCapital — Investir la terre. Cultiver l'avenir."
+            className="h-20 sm:h-28 mx-auto mb-6 drop-shadow-md"
           />
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight">
             Liste d'attente — Projets agricoles AgriCapital
           </h1>
+          <p className="text-sm text-muted-foreground">Daloa, Côte d'Ivoire · Palmier à huile</p>
         </div>
 
         {!submitted ? (
           <>
             {/* Presentation */}
-            <div className="bg-card rounded-lg border p-6 mb-8 text-sm sm:text-base leading-relaxed text-foreground/90">
-              <p className="mb-4">
-                Aujourd'hui, de nombreux professionnels, fonctionnaires, membres de la diaspora, commerçants et entrepreneurs souhaitent développer une activité agricole durable.
+            <div className="bg-card/95 backdrop-blur-sm rounded-xl border border-border/60 shadow-lg p-6 sm:p-8 mb-8 text-sm sm:text-base leading-relaxed text-foreground/90">
+              <p className="mb-4 text-base sm:text-lg font-medium text-foreground">
+                Vous envisagez de développer une activité agricole sérieuse et durable.
               </p>
-              <p className="mb-3">Pour beaucoup, posséder une plantation représente :</p>
-              <ul className="list-disc pl-6 mb-4 space-y-1">
-                <li>une manière de sécuriser un patrimoine</li>
-                <li>préparer une retraite plus sereine</li>
-                <li>diversifier leurs activités</li>
-                <li>transmettre un actif productif à leur famille.</li>
+              <p className="mb-4">
+                Que ce soit pour sécuriser votre patrimoine, préparer votre retraite, diversifier vos revenus ou construire un actif transmissible à votre famille, l'agriculture représente aujourd'hui une opportunité stratégique à fort potentiel.
+              </p>
+              <p className="mb-3 font-semibold text-foreground">Mais réussir un projet agricole ne s'improvise pas.</p>
+              <ul className="space-y-2 mb-4">
+                {[
+                  "Accès sécurisé à la terre",
+                  "Choix d'une zone réellement productive",
+                  "Partenaires fiables",
+                  "Encadrement technique rigoureux",
+                  "Gestion professionnelle sur le long terme"
+                ].map(item => (
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="mt-1.5 h-2 w-2 rounded-full bg-primary flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
-              <p className="mb-3">Cependant, dans la pratique, plusieurs difficultés se posent :</p>
-              <ul className="list-disc pl-6 mb-4 space-y-1">
-                <li>accès sécurisé à la terre</li>
-                <li>identification de partenaires sérieux et fiables</li>
-                <li>mise en place d'une gestion agricole professionnelle</li>
-                <li>suivi technique sur le long terme.</li>
-              </ul>
               <p className="mb-4">
-                AgriCapital travaille actuellement sur une nouvelle approche destinée à faciliter la création et le développement de plantations agricoles durables.
+                C'est précisément sur ces fondations qu'<strong>AgriCapital</strong> construit sa nouvelle approche : structurer, sécuriser et professionnaliser le développement de plantations agricoles durables.
               </p>
               <p className="mb-4">
-                Dans un premier temps, les projets étudiés concernent principalement <strong>le développement de plantations de palmier à huile</strong>, tout en restant ouverts à d'autres cultures pérennes dans le futur.
+                Nous lançons actuellement une première phase centrée sur <strong>le développement de plantations de palmier à huile</strong>, avec une implantation initiale dans la zone stratégique de <strong>Daloa</strong>.
               </p>
-              <p>
-                Si ce sujet vous intéresse, vous pouvez rejoindre la liste d'attente afin d'être informé en priorité des prochaines étapes.
+              <p className="text-primary font-medium">
+                Si vous souhaitez être informé en priorité et étudier votre positionnement dans ce projet, rejoignez la liste d'attente.
               </p>
             </div>
 
@@ -59,6 +72,11 @@ const Index = () => {
         ) : (
           <SuccessMessage />
         )}
+
+        {/* Footer */}
+        <p className="text-center text-xs text-muted-foreground mt-8">
+          © {new Date().getFullYear()} AgriCapital · Investir la terre. Cultiver l'avenir.
+        </p>
       </div>
     </div>
   );

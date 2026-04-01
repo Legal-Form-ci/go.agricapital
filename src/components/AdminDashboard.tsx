@@ -26,6 +26,7 @@ type Inscription = {
   timing_projet: string | null;
   niveau_projet: string | null;
   source: string | null;
+  pret_daloa: string | null;
   date_inscription: string;
 };
 
@@ -90,6 +91,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     Motivation: r.motivation?.join(", ") || "",
     "Délai projet": r.timing_projet || "",
     "Niveau projet": r.niveau_projet || "",
+    "Prêt Daloa": r.pret_daloa || "",
     Source: r.source || "",
     "Date inscription": r.date_inscription,
   }));
@@ -193,6 +195,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                 <TableHead>Motivation</TableHead>
                 <TableHead>Délai</TableHead>
                 <TableHead>Niveau</TableHead>
+                <TableHead>Daloa</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -208,10 +211,11 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                   <TableCell className="max-w-[200px] truncate">{row.motivation?.join(", ") || "—"}</TableCell>
                   <TableCell className="whitespace-nowrap">{row.timing_projet || "—"}</TableCell>
                   <TableCell className="whitespace-nowrap">{row.niveau_projet || "—"}</TableCell>
+                  <TableCell className="whitespace-nowrap">{row.pret_daloa || "—"}</TableCell>
                 </TableRow>
               ))}
               {filtered.length === 0 && (
-                <TableRow><TableCell colSpan={10} className="text-center py-8 text-muted-foreground">Aucune inscription trouvée.</TableCell></TableRow>
+                <TableRow><TableCell colSpan={11} className="text-center py-8 text-muted-foreground">Aucune inscription trouvée.</TableCell></TableRow>
               )}
             </TableBody>
           </Table>
