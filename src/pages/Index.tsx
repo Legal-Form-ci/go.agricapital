@@ -1,7 +1,7 @@
 import { useState } from "react";
 import WaitlistForm from "@/components/WaitlistForm";
 import SuccessMessage from "@/components/SuccessMessage";
-import logoAgricapital from "@/assets/logo-agricapital.png";
+import heroAgricapital from "@/assets/hero-agricapital.png";
 import palmBg from "@/assets/palm-background.jpg";
 
 const Index = () => {
@@ -14,20 +14,20 @@ const Index = () => {
         className="fixed inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${palmBg})` }}
       />
-      <div className="fixed inset-0 bg-background/92" />
+      <div className="fixed inset-0 bg-gradient-to-b from-[hsl(150,30%,8%/0.75)] via-[hsl(150,20%,10%/0.88)] to-[hsl(150,20%,10%/0.95)]" />
 
-      <div className="relative z-10 max-w-2xl mx-auto px-4 py-8 sm:py-14">
-        {/* Header */}
-        <div className="text-center mb-8">
+      <div className="relative z-10 max-w-2xl mx-auto px-4 py-6 sm:py-10">
+        {/* Hero image */}
+        <div className="text-center mb-6">
           <img
-            src={logoAgricapital}
-            alt="AgriCapital — Investir la terre. Cultiver l'avenir."
-            className="h-20 sm:h-28 mx-auto mb-6 drop-shadow-md"
+            src={heroAgricapital}
+            alt="AgriCapital — Devenez planteur de palmier à huile"
+            className="w-full max-w-md mx-auto rounded-xl shadow-2xl mb-5"
           />
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-2 leading-tight drop-shadow-lg">
             Liste d'attente — Projets agricoles AgriCapital
           </h1>
-          <p className="text-sm text-muted-foreground">Daloa, Côte d'Ivoire · Palmier à huile</p>
+          <p className="text-sm text-primary-foreground/80 font-medium drop-shadow">Daloa, Côte d'Ivoire · Palmier à huile</p>
         </div>
 
         {!submitted ? (
