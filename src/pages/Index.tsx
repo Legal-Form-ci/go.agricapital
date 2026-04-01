@@ -1,7 +1,7 @@
 import { useState } from "react";
 import WaitlistForm from "@/components/WaitlistForm";
 import SuccessMessage from "@/components/SuccessMessage";
-import logoAgricapital from "@/assets/logo-agricapital.png";
+import heroAgricapital from "@/assets/hero-agricapital.png";
 import palmBg from "@/assets/palm-background.jpg";
 
 const Index = () => {
