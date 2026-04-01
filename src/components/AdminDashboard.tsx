@@ -215,7 +215,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                 </TableRow>
               ))}
               {filtered.length === 0 && (
-                <TableRow><TableCell colSpan={10} className="text-center py-8 text-muted-foreground">Aucune inscription trouvée.</TableCell></TableRow>
+                <TableRow><TableCell colSpan={11} className="text-center py-8 text-muted-foreground">Aucune inscription trouvée.</TableCell></TableRow>
               )}
             </TableBody>
           </Table>
