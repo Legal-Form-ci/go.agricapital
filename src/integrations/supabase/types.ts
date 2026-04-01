@@ -23,6 +23,7 @@ export type Database = {
           niveau_projet: string | null
           nom: string
           possede_terre: boolean
+          pret_daloa: string | null
           projet_interet: string[] | null
           souhait_plantation: string | null
           source: string | null
@@ -41,6 +42,7 @@ export type Database = {
           niveau_projet?: string | null
           nom: string
           possede_terre?: boolean
+          pret_daloa?: string | null
           projet_interet?: string[] | null
           souhait_plantation?: string | null
           source?: string | null
@@ -59,6 +61,7 @@ export type Database = {
           niveau_projet?: string | null
           nom?: string
           possede_terre?: boolean
+          pret_daloa?: string | null
           projet_interet?: string[] | null
           souhait_plantation?: string | null
           source?: string | null

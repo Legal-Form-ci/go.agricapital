@@ -1,0 +1,1 @@
+ALTER TABLE public.waitlist_agricapital ADD COLUMN pret_daloa TEXT;
