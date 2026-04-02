@@ -15,7 +15,7 @@ const Index = () => {
         style={{ backgroundImage: `url(${palmBg})` }}
       />
       <div className="fixed inset-0 bg-white/50" />
-      <div className="fixed inset-0 bg-gradient-to-b from-[hsl(150,30%,12%/0.6)] via-white/30 to-white/40" />
+      <div className="fixed inset-0 bg-gradient-to-b from-green-950/60 via-white/30 to-white/40" />
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-6 sm:py-10">
         {/* Hero image */}
