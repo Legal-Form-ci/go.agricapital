@@ -75,9 +75,11 @@ const Index = () => {
         )}
 
         {/* Footer */}
-        <p className="text-center text-xs text-muted-foreground mt-8">
-          © {new Date().getFullYear()} AgriCapital · Investir la terre. Cultiver l'avenir.
-        </p>
+        <div className="mt-8 bg-white/80 backdrop-blur-sm rounded-lg px-4 py-3">
+          <p className="text-center text-xs text-foreground/70">
+            © {new Date().getFullYear()} AgriCapital · Investir la terre. Cultiver l'avenir.
+          </p>
+        </div>
       </div>
     </div>
   );

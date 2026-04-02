@@ -3,7 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 import logoAgricapital from "@/assets/logo-agricapital.png";
 
 export default function SuccessMessage() {
-  const formUrl = "https://waitlist.agricapital.ci";
+  const formUrl = "https://go.agricapital.ci";
 
   return (
     <div className="text-center space-y-8">
