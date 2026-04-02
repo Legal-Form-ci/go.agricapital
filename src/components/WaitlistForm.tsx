@@ -340,9 +340,11 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
         Rejoindre la liste d'attente
       </Button>
 
-      <p className="text-xs text-muted-foreground text-center leading-relaxed">
-        Les informations collectées sont confidentielles et utilisées uniquement pour vous informer des initiatives agricoles développées par AgriCapital.
-      </p>
+      <div className="bg-white/70 backdrop-blur-sm rounded-lg px-4 py-3">
+        <p className="text-xs text-foreground/70 text-center leading-relaxed">
+          Les informations collectées sont confidentielles et utilisées uniquement pour vous informer des initiatives agricoles développées par AgriCapital.
+        </p>
+      </div>
     </form>
   );
 }

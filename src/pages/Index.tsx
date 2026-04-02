@@ -14,7 +14,8 @@ const Index = () => {
         className="fixed inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${palmBg})` }}
       />
-      <div className="fixed inset-0 bg-gradient-to-b from-[hsl(150,30%,8%/0.75)] via-[hsl(150,20%,10%/0.88)] to-[hsl(150,20%,10%/0.95)]" />
+      <div className="fixed inset-0 bg-white/50" />
+      <div className="fixed inset-0 bg-gradient-to-b from-green-950/60 via-white/30 to-white/40" />
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-6 sm:py-10">
         {/* Hero image */}
@@ -24,10 +25,10 @@ const Index = () => {
             alt="AgriCapital — Devenez planteur de palmier à huile"
             className="w-full max-w-md mx-auto rounded-xl shadow-2xl mb-5"
           />
-          <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-2 leading-tight drop-shadow-lg">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight drop-shadow-sm">
             Liste d'attente — Projets agricoles AgriCapital
           </h1>
-          <p className="text-sm text-primary-foreground/80 font-medium drop-shadow">Daloa, Côte d'Ivoire · Palmier à huile</p>
+          <p className="text-sm text-foreground/80 font-medium">Daloa, Côte d'Ivoire · Palmier à huile</p>
         </div>
 
         {!submitted ? (
@@ -74,9 +75,11 @@ const Index = () => {
         )}
 
         {/* Footer */}
-        <p className="text-center text-xs text-muted-foreground mt-8">
-          © {new Date().getFullYear()} AgriCapital · Investir la terre. Cultiver l'avenir.
-        </p>
+        <div className="mt-8 bg-white/80 backdrop-blur-sm rounded-lg px-4 py-3">
+          <p className="text-center text-xs text-foreground/70">
+            © {new Date().getFullYear()} AgriCapital · Investir la terre. Cultiver l'avenir.
+          </p>
+        </div>
       </div>
     </div>
   );
