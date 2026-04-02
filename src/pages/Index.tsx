@@ -25,10 +25,10 @@ const Index = () => {
             alt="AgriCapital — Devenez planteur de palmier à huile"
             className="w-full max-w-md mx-auto rounded-xl shadow-2xl mb-5"
           />
-          <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-2 leading-tight drop-shadow-lg">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2 leading-tight drop-shadow-sm">
             Liste d'attente — Projets agricoles AgriCapital
           </h1>
-          <p className="text-sm text-primary-foreground/80 font-medium drop-shadow">Daloa, Côte d'Ivoire · Palmier à huile</p>
+          <p className="text-sm text-foreground/80 font-medium">Daloa, Côte d'Ivoire · Palmier à huile</p>
         </div>
 
         {!submitted ? (
