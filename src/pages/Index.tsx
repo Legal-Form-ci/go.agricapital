@@ -6,6 +6,7 @@ import palmBg from "@/assets/palm-background.jpg";
 
 const Index = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [userName, setUserName] = useState("");
 
   return (
     <div className="min-h-screen relative overflow-x-hidden">
