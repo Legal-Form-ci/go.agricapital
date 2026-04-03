@@ -82,7 +82,7 @@ const defaultForm: FormData = {
   timing_projet: "", niveau_projet: "", source: "", pret_daloa: ""
 };
 
-export default function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
+export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) => void }) {
   const [form, setForm] = useState<FormData>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
