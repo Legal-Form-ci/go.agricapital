@@ -82,7 +82,7 @@ const defaultForm: FormData = {
   timing_projet: "", niveau_projet: "", source: "", pret_daloa: ""
 };
 
-export default function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
+export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) => void }) {
   const [form, setForm] = useState<FormData>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -138,7 +138,7 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: () => void }) {
 
       localStorage.removeItem(STORAGE_KEY);
       toast.success("Inscription enregistrée !");
-      onSuccess();
+      onSuccess(form.nom);
     } catch (err: any) {
       toast.error("Erreur lors de l'inscription. Veuillez réessayer.");
       console.error(err);

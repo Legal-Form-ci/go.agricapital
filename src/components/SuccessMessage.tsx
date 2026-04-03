@@ -1,9 +1,19 @@
 import { QRCodeSVG } from "qrcode.react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import logoAgricapital from "@/assets/logo-agricapital.png";
 
-export default function SuccessMessage() {
-  const formUrl = "https://www.go.agricapital.ci";
+interface SuccessMessageProps {
+  userName: string;
+}
+
+function buildWhatsAppUrl(name: string) {
+  const message = `Bonjour, je suis ${name}. J'ai rejoint la liste d'attente AgriCapital et je souhaiterais échanger davantage sur les projets de plantation de palmier à huile à Daloa. Merci.`;
+  return `https://wa.me/2250564551717?text=${encodeURIComponent(message)}`;
+}
+
+export default function SuccessMessage({ userName }: SuccessMessageProps) {
+  const whatsappUrl = buildWhatsAppUrl(userName);
 
   return (
     <div className="text-center space-y-8">
@@ -20,12 +30,12 @@ export default function SuccessMessage() {
 
       <div className="bg-card rounded-lg border p-8 space-y-4">
         <p className="text-sm font-medium text-muted-foreground">
-          Scannez ce code pour rejoindre la liste d'attente.
+          Scannez ce code pour nous contacter directement sur WhatsApp
         </p>
         <div className="flex justify-center">
           <div className="bg-white p-4 rounded-lg inline-block">
             <QRCodeSVG
-              value={formUrl}
+              value={whatsappUrl}
               size={200}
               level="H"
               includeMargin
@@ -39,8 +49,14 @@ export default function SuccessMessage() {
           </div>
         </div>
         <p className="text-xs text-muted-foreground">
-          Lien également disponible dans la description.
+          Ou cliquez directement sur le bouton ci-dessous
         </p>
+        <Button asChild className="bg-[#25D366] hover:bg-[#1da851] text-white font-semibold">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+            <MessageCircle className="mr-2 h-5 w-5" />
+            Contacter AgriCapital sur WhatsApp
+          </a>
+        </Button>
       </div>
     </div>
   );

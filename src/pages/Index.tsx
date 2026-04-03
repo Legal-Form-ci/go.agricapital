@@ -6,6 +6,7 @@ import palmBg from "@/assets/palm-background.jpg";
 
 const Index = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [userName, setUserName] = useState("");
 
   return (
     <div className="min-h-screen relative overflow-x-hidden">
@@ -68,10 +69,10 @@ const Index = () => {
             </div>
 
             {/* Form */}
-            <WaitlistForm onSuccess={() => setSubmitted(true)} />
+            <WaitlistForm onSuccess={(name: string) => { setUserName(name); setSubmitted(true); }} />
           </>
         ) : (
-          <SuccessMessage />
+          <SuccessMessage userName={userName} />
         )}
 
         {/* Footer */}
