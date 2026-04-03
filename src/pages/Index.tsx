@@ -69,7 +69,7 @@ const Index = () => {
             </div>
 
             {/* Form */}
-            <WaitlistForm onSuccess={() => setSubmitted(true)} />
+            <WaitlistForm onSuccess={(name: string) => { setUserName(name); setSubmitted(true); }} />
           </>
         ) : (
           <SuccessMessage />
