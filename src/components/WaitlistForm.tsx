@@ -138,7 +138,7 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) 
 
       localStorage.removeItem(STORAGE_KEY);
       toast.success("Inscription enregistrée !");
-      onSuccess();
+      onSuccess(form.nom);
     } catch (err: any) {
       toast.error("Erreur lors de l'inscription. Veuillez réessayer.");
       console.error(err);
