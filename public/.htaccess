@@ -1,0 +1,14 @@
+RewriteEngine On
+RewriteBase /
+
+# Redirect www variants
+RewriteCond %{HTTP_HOST} ^go\.agricapital\.ci$ [NC]
+RewriteRule ^(.*)$ https://www.go.agricapital.ci/$1 [R=301,L]
+
+RewriteCond %{HTTP_HOST} ^waitlist\.agricapital\.ci$ [NC]
+RewriteRule ^(.*)$ https://www.go.agricapital.ci/$1 [R=301,L]
+
+# SPA fallback - serve index.html for all non-file requests
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
