@@ -158,6 +158,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
               ))}
             </CardContent>
           </Card>
+          <SyncStatsCard />
         </div>
 
         {/* Filters & Export */}
