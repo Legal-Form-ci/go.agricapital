@@ -61,9 +61,17 @@ export async function getQueueCount(): Promise<number> {
 }
 
 const CHANNEL = "agricapital-queue-change";
+const STATS_CHANNEL = "agricapital-sync-stats-change";
 function notifyChange() {
   try {
     window.dispatchEvent(new CustomEvent(CHANNEL));
+  } catch {
+    /* noop */
+  }
+}
+function notifyStatsChange() {
+  try {
+    window.dispatchEvent(new CustomEvent(STATS_CHANNEL));
   } catch {
     /* noop */
   }
@@ -73,6 +81,47 @@ export function onQueueChange(cb: () => void) {
   window.addEventListener(CHANNEL, handler);
   return () => window.removeEventListener(CHANNEL, handler);
 }
+export function onSyncStatsChange(cb: () => void) {
+  const handler = () => cb();
+  window.addEventListener(STATS_CHANNEL, handler);
+  return () => window.removeEventListener(STATS_CHANNEL, handler);
+}
+
+// ---------------- Sync stats (persisted in localStorage) ----------------
+export interface SyncErrorEntry {
+  at: number;
+  message: string;
+  payloadSummary: string;
+}
+export interface SyncStats {
+  successCount: number;
+  failureCount: number;
+  lastSyncAt: number | null;
+  errors: SyncErrorEntry[]; // last 10
+}
+const STATS_KEY = "agricapital-sync-stats-v1";
+const MAX_ERRORS = 10;
+
+export function getSyncStats(): SyncStats {
+  try {
+    const raw = localStorage.getItem(STATS_KEY);
+    if (raw) return JSON.parse(raw) as SyncStats;
+  } catch {
+    /* noop */
+  }
+  return { successCount: 0, failureCount: 0, lastSyncAt: null, errors: [] };
+}
+function saveSyncStats(stats: SyncStats) {
+  try {
+    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+    notifyStatsChange();
+  } catch {
+    /* noop */
+  }
+}
+export function resetSyncStats() {
+  saveSyncStats({ successCount: 0, failureCount: 0, lastSyncAt: null, errors: [] });
+}
 
 let syncing = false;
 
@@ -81,6 +130,7 @@ export async function syncQueue(): Promise<{ ok: number; failed: number }> {
   syncing = true;
   let ok = 0;
   let failed = 0;
+  const stats = getSyncStats();
   try {
     const items = await getQueue();
     for (const item of items) {
@@ -92,9 +142,17 @@ export async function syncQueue(): Promise<{ ok: number; failed: number }> {
         if (error) throw error;
         if (item.id != null) await removeFromQueue(item.id);
         ok++;
+        stats.successCount++;
       } catch (err: unknown) {
         failed++;
+        stats.failureCount++;
         const message = err instanceof Error ? err.message : String(err);
+        const p = item.payload as Record<string, unknown>;
+        const summary = `${String(p.nom ?? "?")} (${String(p.whatsapp ?? "?")})`;
+        stats.errors = [
+          { at: Date.now(), message, payloadSummary: summary },
+          ...stats.errors,
+        ].slice(0, MAX_ERRORS);
         if (item.id != null) {
           await updateQueueItem({
             ...item,
@@ -106,6 +164,8 @@ export async function syncQueue(): Promise<{ ok: number; failed: number }> {
     }
   } finally {
     syncing = false;
+    stats.lastSyncAt = Date.now();
+    saveSyncStats(stats);
   }
   return { ok, failed };
 }
