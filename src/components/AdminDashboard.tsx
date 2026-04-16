@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import logoAgricapital from "@/assets/logo-agricapital.png";
 import PendingQueueCard from "./PendingQueueCard";
+import SyncStatsCard from "./SyncStatsCard";
 
 type Inscription = {
   id: string;
@@ -132,7 +133,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
         <PendingQueueCard />
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <Card>
             <CardHeader className="pb-2"><CardTitle className="text-sm text-muted-foreground flex items-center gap-2"><Users className="h-4 w-4" /> Total inscriptions</CardTitle></CardHeader>
             <CardContent><p className="text-3xl font-bold text-primary">{data.length}</p></CardContent>
@@ -157,6 +158,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
               ))}
             </CardContent>
           </Card>
+          <SyncStatsCard />
         </div>
 
         {/* Filters & Export */}
