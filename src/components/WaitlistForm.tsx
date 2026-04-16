@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { enqueueSubmission, syncQueue } from "@/lib/offlineQueue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -115,33 +116,54 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) 
     }
 
     setLoading(true);
+    const payload = {
+      nom: form.nom,
+      zone: form.zone,
+      ville: form.ville || null,
+      whatsapp: form.whatsapp,
+      email: form.email,
+      possede_terre: form.possede_terre ?? false,
+      superficie_terre: form.possede_terre ? parseFloat(form.superficie_terre) || null : null,
+      souhait_plantation: !form.possede_terre ? form.souhait_plantation || null : null,
+      projet_interet: form.projet_interet.length > 0 ? form.projet_interet : null,
+      superficie_souhaitee: form.superficie_souhaitee || null,
+      motivation: form.motivation.length > 0 ? form.motivation : null,
+      timing_projet: form.timing_projet || null,
+      niveau_projet: form.niveau_projet || null,
+      source: form.source || null,
+      pret_daloa: form.pret_daloa || null,
+    };
+
     try {
-      const { error } = await supabase.from("waitlist_agricapital").insert({
-        nom: form.nom,
-        zone: form.zone,
-        ville: form.ville || null,
-        whatsapp: form.whatsapp,
-        email: form.email,
-        possede_terre: form.possede_terre ?? false,
-        superficie_terre: form.possede_terre ? parseFloat(form.superficie_terre) || null : null,
-        souhait_plantation: !form.possede_terre ? form.souhait_plantation || null : null,
-        projet_interet: form.projet_interet.length > 0 ? form.projet_interet : null,
-        superficie_souhaitee: form.superficie_souhaitee || null,
-        motivation: form.motivation.length > 0 ? form.motivation : null,
-        timing_projet: form.timing_projet || null,
-        niveau_projet: form.niveau_projet || null,
-        source: form.source || null,
-        pret_daloa: form.pret_daloa || null,
-      });
+      if (!navigator.onLine) {
+        // Hors ligne : on met en file et on confirme à l'utilisateur
+        await enqueueSubmission(payload);
+        localStorage.removeItem(STORAGE_KEY);
+        toast.success("Enregistré hors ligne. Synchronisation automatique dès retour réseau.");
+        onSuccess(form.nom);
+        return;
+      }
+
+      const { error } = await supabase.from("waitlist_agricapital").insert(payload);
 
       if (error) throw error;
 
       localStorage.removeItem(STORAGE_KEY);
       toast.success("Inscription enregistrée !");
       onSuccess(form.nom);
-    } catch (err: any) {
-      toast.error("Erreur lors de l'inscription. Veuillez réessayer.");
-      console.error(err);
+      // tente d'écouler d'éventuels éléments restants dans la file
+      syncQueue().catch(() => {});
+    } catch (err: unknown) {
+      // Échec réseau ou serveur : on bascule en file d'attente offline
+      try {
+        await enqueueSubmission(payload);
+        localStorage.removeItem(STORAGE_KEY);
+        toast.success("Réseau instable. Inscription enregistrée et sera synchronisée automatiquement.");
+        onSuccess(form.nom);
+      } catch {
+        toast.error("Erreur lors de l'inscription. Veuillez réessayer.");
+        console.error(err);
+      }
     } finally {
       setLoading(false);
     }
