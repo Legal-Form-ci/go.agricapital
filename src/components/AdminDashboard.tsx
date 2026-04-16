@@ -9,6 +9,7 @@ import { LogOut, Download, Users, CalendarDays, MapPin, Ruler } from "lucide-rea
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import logoAgricapital from "@/assets/logo-agricapital.png";
+import PendingQueueCard from "./PendingQueueCard";
 
 type Inscription = {
   id: string;
@@ -129,6 +130,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+        <PendingQueueCard />
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
