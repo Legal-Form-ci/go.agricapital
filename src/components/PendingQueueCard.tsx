@@ -66,7 +66,19 @@ export default function PendingQueueCard() {
     toast.success("Inscription locale supprimée.");
   };
 
-  const handleExportCSV = () => {
+  const handleClearAll = async () => {
+    if (items.length === 0) return;
+    if (
+      !confirm(
+        `⚠️ Supprimer définitivement les ${items.length} inscription(s) en file locale ?\n\nCette action est irréversible. Aucune donnée ne sera envoyée au serveur.`,
+      )
+    )
+      return;
+    const n = await clearQueue();
+    await refresh();
+    toast.success(`${n} inscription(s) locale(s) supprimée(s).`);
+  };
+
     if (items.length === 0) {
       toast.info("File vide.");
       return;
