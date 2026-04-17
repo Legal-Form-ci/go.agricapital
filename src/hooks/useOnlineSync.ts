@@ -78,6 +78,8 @@ export function useOnlineSync() {
     if (!navigator.onLine) return;
     const before = await getQueueCount();
     if (before === 0) return;
+    // Vérifie si la file est ancienne AVANT d'envoyer (sinon l'âge sera reset)
+    await maybeAlertSupportStaleQueue();
     const { ok, failed } = await syncQueue();
     await refreshCount();
     if (ok > 0) {
