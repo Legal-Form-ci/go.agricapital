@@ -195,6 +195,26 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {(pending > 0 || !online) && (
+        <div className="flex items-center justify-between gap-2 rounded-xl border border-amber-400/60 bg-amber-50/95 backdrop-blur-sm px-3 py-2 shadow-sm text-xs sm:text-sm">
+          <div className="flex items-center gap-2 min-w-0">
+            <WifiOff className="h-4 w-4 text-amber-700 flex-shrink-0" />
+            <span className="text-amber-900 font-medium truncate">
+              {!online ? "Mode hors-ligne" : "En ligne"}
+            </span>
+          </div>
+          {pending > 0 && (
+            <button
+              type="button"
+              onClick={() => online && triggerSync()}
+              className="rounded-full bg-amber-600 text-white px-2.5 py-0.5 text-[11px] font-semibold whitespace-nowrap hover:bg-amber-700 transition"
+              title={online ? "Cliquer pour synchroniser maintenant" : "En attente de réseau"}
+            >
+              {pending} en attente
+            </button>
+          )}
+        </div>
+      )}
       {!online && (
         <div
           role="status"
