@@ -136,12 +136,31 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) 
       pret_daloa: form.pret_daloa || null,
     };
 
+    const showQueuedToast = (reason: "offline" | "network-error") => {
+      toast.success(
+        reason === "offline"
+          ? "Inscription enregistrée hors ligne ✅"
+          : "Réseau instable — inscription enregistrée localement ✅",
+        {
+          description:
+            "Vos données sont sauvegardées sur cet appareil et seront envoyées automatiquement dès qu'une connexion stable sera détectée.",
+          duration: Infinity,
+          action: {
+            label: "Réessayer maintenant",
+            onClick: () => {
+              triggerSync();
+            },
+          },
+        },
+      );
+    };
+
     try {
       if (!navigator.onLine) {
         // Hors ligne : on met en file et on confirme à l'utilisateur
         await enqueueSubmission(payload);
         localStorage.removeItem(STORAGE_KEY);
-        toast.success("Enregistré hors ligne. Synchronisation automatique dès retour réseau.");
+        showQueuedToast("offline");
         onSuccess(form.nom);
         return;
       }
@@ -160,7 +179,7 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) 
       try {
         await enqueueSubmission(payload);
         localStorage.removeItem(STORAGE_KEY);
-        toast.success("Réseau instable. Inscription enregistrée et sera synchronisée automatiquement.");
+        showQueuedToast("network-error");
         onSuccess(form.nom);
       } catch {
         toast.error("Erreur lors de l'inscription. Veuillez réessayer.");
