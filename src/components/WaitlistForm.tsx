@@ -176,7 +176,22 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Section 1: Identité */}
+      {!online && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="flex items-start gap-2 rounded-xl border border-amber-400/60 bg-amber-50/95 backdrop-blur-sm px-4 py-3 shadow-sm"
+        >
+          <WifiOff className="h-5 w-5 text-amber-700 flex-shrink-0 mt-0.5" />
+          <div className="text-sm">
+            <p className="font-semibold text-amber-900">Mode hors-ligne</p>
+            <p className="text-amber-900/80 text-xs sm:text-sm">
+              Votre inscription sera enregistrée sur cet appareil et envoyée
+              automatiquement dès le retour du réseau.
+            </p>
+          </div>
+        </div>
+      )}
       <div className={sectionClass}>
         <h2 className="text-base font-bold text-primary flex items-center gap-2">
           <span className="h-6 w-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">1</span>
