@@ -159,9 +159,32 @@ export default function PendingQueueCard() {
             <RefreshCw className={`h-3.5 w-3.5 mr-1 ${syncing ? "animate-spin" : ""}`} />
             Synchroniser
           </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="text-destructive hover:text-destructive border-destructive/40"
+            onClick={handleClearAll}
+          >
+            <Trash2 className="h-3.5 w-3.5 mr-1" />
+            Tout supprimer
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
+        {oldestAgeMs !== null && oldestAgeMs > 24 * 3600 * 1000 && (
+          <div className="mb-3 flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+            <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold">
+                Aucune synchronisation depuis plus de {Math.floor(oldestAgeMs / 3600_000)}h
+              </p>
+              <p className="opacity-90">
+                Cherchez une zone avec du réseau (3G/4G/Wi-Fi) ou contactez le support
+                pour transmettre l'export CSV manuellement.
+              </p>
+            </div>
+          </div>
+        )}
         <p className="text-xs text-amber-900/80 mb-3">
           Ces inscriptions sont enregistrées sur cet appareil uniquement et seront
           envoyées automatiquement au serveur dès qu'une connexion stable est
