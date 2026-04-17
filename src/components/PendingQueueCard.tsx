@@ -79,6 +79,7 @@ export default function PendingQueueCard() {
     toast.success(`${n} inscription(s) locale(s) supprimée(s).`);
   };
 
+  const handleExportCSV = () => {
     if (items.length === 0) {
       toast.info("File vide.");
       return;
