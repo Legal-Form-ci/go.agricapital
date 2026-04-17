@@ -93,7 +93,7 @@ export default function WaitlistForm({ onSuccess }: { onSuccess: (name: string) 
     return defaultForm;
   });
   const [loading, setLoading] = useState(false);
-  const { online } = useOnlineSync();
+  const { online, pending, triggerSync } = useOnlineSync();
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
