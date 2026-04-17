@@ -22,10 +22,12 @@ import { toast } from "sonner";
 export default function PendingQueueCard() {
   const [items, setItems] = useState<QueuedSubmission[]>([]);
   const [syncing, setSyncing] = useState(false);
+  const [oldestAgeMs, setOldestAgeMs] = useState<number | null>(null);
 
   const refresh = async () => {
     try {
       setItems(await getQueue());
+      setOldestAgeMs(await getOldestPendingAge());
     } catch {
       /* noop */
     }
@@ -34,7 +36,12 @@ export default function PendingQueueCard() {
   useEffect(() => {
     refresh();
     const off = onQueueChange(refresh);
-    return off;
+    // re-évaluer l'âge toutes les minutes pour la bannière 24h
+    const t = window.setInterval(refresh, 60_000);
+    return () => {
+      off();
+      window.clearInterval(t);
+    };
   }, []);
 
   const handleSync = async () => {
