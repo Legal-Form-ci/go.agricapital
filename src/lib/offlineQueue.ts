@@ -60,6 +60,25 @@ export async function getQueueCount(): Promise<number> {
   return await db.count(STORE);
 }
 
+export async function clearQueue(): Promise<number> {
+  const db = await getDB();
+  const count = await db.count(STORE);
+  await db.clear(STORE);
+  notifyChange();
+  return count;
+}
+
+/**
+ * Renvoie l'âge (en ms) du plus ancien élément en file, ou null si vide.
+ * Utile pour alerter le commercial si la synchro tarde (> 24h).
+ */
+export async function getOldestPendingAge(): Promise<number | null> {
+  const items = await getQueue();
+  if (items.length === 0) return null;
+  const oldest = items.reduce((min, it) => Math.min(min, it.createdAt), Date.now());
+  return Date.now() - oldest;
+}
+
 const CHANNEL = "agricapital-queue-change";
 const STATS_CHANNEL = "agricapital-sync-stats-change";
 function notifyChange() {
