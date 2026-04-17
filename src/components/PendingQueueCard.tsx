@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { CloudOff, RefreshCw, Trash2, Download } from "lucide-react";
+import { CloudOff, RefreshCw, Trash2, Download, AlertTriangle } from "lucide-react";
 import {
+  clearQueue,
+  getOldestPendingAge,
   getQueue,
   onQueueChange,
   removeFromQueue,
@@ -20,10 +22,12 @@ import { toast } from "sonner";
 export default function PendingQueueCard() {
   const [items, setItems] = useState<QueuedSubmission[]>([]);
   const [syncing, setSyncing] = useState(false);
+  const [oldestAgeMs, setOldestAgeMs] = useState<number | null>(null);
 
   const refresh = async () => {
     try {
       setItems(await getQueue());
+      setOldestAgeMs(await getOldestPendingAge());
     } catch {
       /* noop */
     }
@@ -32,7 +36,12 @@ export default function PendingQueueCard() {
   useEffect(() => {
     refresh();
     const off = onQueueChange(refresh);
-    return off;
+    // re-évaluer l'âge toutes les minutes pour la bannière 24h
+    const t = window.setInterval(refresh, 60_000);
+    return () => {
+      off();
+      window.clearInterval(t);
+    };
   }, []);
 
   const handleSync = async () => {
@@ -55,6 +64,19 @@ export default function PendingQueueCard() {
     await removeFromQueue(id);
     await refresh();
     toast.success("Inscription locale supprimée.");
+  };
+
+  const handleClearAll = async () => {
+    if (items.length === 0) return;
+    if (
+      !confirm(
+        `⚠️ Supprimer définitivement les ${items.length} inscription(s) en file locale ?\n\nCette action est irréversible. Aucune donnée ne sera envoyée au serveur.`,
+      )
+    )
+      return;
+    const n = await clearQueue();
+    await refresh();
+    toast.success(`${n} inscription(s) locale(s) supprimée(s).`);
   };
 
   const handleExportCSV = () => {
@@ -137,9 +159,32 @@ export default function PendingQueueCard() {
             <RefreshCw className={`h-3.5 w-3.5 mr-1 ${syncing ? "animate-spin" : ""}`} />
             Synchroniser
           </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="text-destructive hover:text-destructive border-destructive/40"
+            onClick={handleClearAll}
+          >
+            <Trash2 className="h-3.5 w-3.5 mr-1" />
+            Tout supprimer
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
+        {oldestAgeMs !== null && oldestAgeMs > 24 * 3600 * 1000 && (
+          <div className="mb-3 flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+            <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold">
+                Aucune synchronisation depuis plus de {Math.floor(oldestAgeMs / 3600_000)}h
+              </p>
+              <p className="opacity-90">
+                Cherchez une zone avec du réseau (3G/4G/Wi-Fi) ou contactez le support
+                pour transmettre l'export CSV manuellement.
+              </p>
+            </div>
+          </div>
+        )}
         <p className="text-xs text-amber-900/80 mb-3">
           Ces inscriptions sont enregistrées sur cet appareil uniquement et seront
           envoyées automatiquement au serveur dès qu'une connexion stable est
