@@ -5,12 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { LogOut, Download, Users, CalendarDays, MapPin, Ruler } from "lucide-react";
+import { LogOut, Download, Users, CalendarDays, MapPin, Ruler, UserCircle2, Check } from "lucide-react";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import logoAgricapital from "@/assets/logo-agricapital.png";
 import PendingQueueCard from "./PendingQueueCard";
 import SyncStatsCard from "./SyncStatsCard";
+import { getCommercialId, setCommercialId } from "@/lib/commercialId";
 
 type Inscription = {
   id: string;
@@ -38,10 +39,19 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [filterZone, setFilterZone] = useState("all");
   const [filterSuperficie, setFilterSuperficie] = useState("all");
   const [search, setSearch] = useState("");
+  const [commercialName, setCommercialName] = useState(getCommercialId());
+  const [commercialSaved, setCommercialSaved] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const saveCommercial = () => {
+    setCommercialId(commercialName);
+    setCommercialSaved(true);
+    toast.success(commercialName.trim() ? `Identifiant enregistré : ${commercialName.trim()}` : "Identifiant supprimé");
+    setTimeout(() => setCommercialSaved(false), 2000);
+  };
 
   const fetchData = async () => {
     const { data: rows, error } = await supabase
