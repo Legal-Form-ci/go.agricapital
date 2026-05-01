@@ -5,13 +5,18 @@ import {
   onQueueChange,
   syncQueue,
 } from "@/lib/offlineQueue";
+import { getCommercialId } from "@/lib/commercialId";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 // Numéro support AgriCapital (sans +) — alerte si retard de synchro > 24h
 const SUPPORT_WHATSAPP = "2250564551717";
 const STALE_THRESHOLD_MS = 24 * 3600 * 1000;
+const STALE_EMAIL_THRESHOLD_MS = 48 * 3600 * 1000;
 const STALE_ALERT_KEY = "agricapital-stale-alert-sent";
+const STALE_EMAIL_ALERT_KEY = "agricapital-stale-email-sent";
 const STALE_ALERT_COOLDOWN_MS = 6 * 3600 * 1000; // ne pas re-spammer plus d'1x / 6h
+const STALE_EMAIL_COOLDOWN_MS = 12 * 3600 * 1000;
 
 /**
  * Si la file locale contient une inscription qui attend depuis plus de 24h,
@@ -24,13 +29,38 @@ async function maybeAlertSupportStaleQueue() {
     const count = await getQueueCount();
     if (age == null || age < STALE_THRESHOLD_MS || count === 0) return;
 
+    const commercialId = getCommercialId() || "(non renseigné)";
+    const hours = Math.floor(age / 3600_000);
+
+    // ---- 1. Email automatique au support si > 48h (cooldown 12h) ----
+    if (age >= STALE_EMAIL_THRESHOLD_MS) {
+      const lastEmail = Number(localStorage.getItem(STALE_EMAIL_ALERT_KEY) || "0");
+      if (Date.now() - lastEmail >= STALE_EMAIL_COOLDOWN_MS) {
+        localStorage.setItem(STALE_EMAIL_ALERT_KEY, String(Date.now()));
+        try {
+          await supabase.functions.invoke("notify-stale-queue", {
+            body: {
+              commercialId,
+              pendingCount: count,
+              oldestAgeHours: hours,
+              userAgent: navigator.userAgent,
+              url: window.location.href,
+            },
+          });
+        } catch (e) {
+          console.warn("notify-stale-queue invoke failed", e);
+        }
+      }
+    }
+
+    // ---- 2. Toast WhatsApp au commercial (cooldown 6h) ----
     const lastAlert = Number(localStorage.getItem(STALE_ALERT_KEY) || "0");
     if (Date.now() - lastAlert < STALE_ALERT_COOLDOWN_MS) return;
     localStorage.setItem(STALE_ALERT_KEY, String(Date.now()));
 
-    const hours = Math.floor(age / 3600_000);
     const message = encodeURIComponent(
       `🔴 [AgriCapital — Retard de synchro]\n` +
+        `Commercial : ${commercialId}\n` +
         `${count} inscription(s) en file locale non synchronisée(s) depuis ${hours}h.\n` +
         `Appareil : ${navigator.userAgent.split(")")[0]})\n` +
         `Heure : ${new Date().toLocaleString("fr-FR")}\n` +
