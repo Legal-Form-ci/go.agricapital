@@ -1,1 +1,7 @@
 project_id = "pgqbegjwckaansznqxzs"
+
+[functions.notify-stale-queue]
+verify_jwt = false
+
+[functions.notify-signup]
+verify_jwt = false
