@@ -5,12 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { LogOut, Download, Users, CalendarDays, MapPin, Ruler } from "lucide-react";
+import { LogOut, Download, Users, CalendarDays, MapPin, Ruler, UserCircle2, Check } from "lucide-react";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import logoAgricapital from "@/assets/logo-agricapital.png";
 import PendingQueueCard from "./PendingQueueCard";
 import SyncStatsCard from "./SyncStatsCard";
+import { getCommercialId, setCommercialId } from "@/lib/commercialId";
 
 type Inscription = {
   id: string;
@@ -38,10 +39,19 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [filterZone, setFilterZone] = useState("all");
   const [filterSuperficie, setFilterSuperficie] = useState("all");
   const [search, setSearch] = useState("");
+  const [commercialName, setCommercialName] = useState(getCommercialId());
+  const [commercialSaved, setCommercialSaved] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const saveCommercial = () => {
+    setCommercialId(commercialName);
+    setCommercialSaved(true);
+    toast.success(commercialName.trim() ? `Identifiant enregistré : ${commercialName.trim()}` : "Identifiant supprimé");
+    setTimeout(() => setCommercialSaved(false), 2000);
+  };
 
   const fetchData = async () => {
     const { data: rows, error } = await supabase
@@ -131,6 +141,28 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-muted-foreground flex items-center gap-2">
+              <UserCircle2 className="h-4 w-4" /> Identifiant du commercial
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2 items-center">
+            <Input
+              placeholder="Ex : Jean Kouassi — Daloa"
+              value={commercialName}
+              onChange={(e) => setCommercialName(e.target.value)}
+              className="max-w-sm"
+              onKeyDown={(e) => { if (e.key === "Enter") saveCommercial(); }}
+            />
+            <Button size="sm" onClick={saveCommercial}>
+              {commercialSaved ? <><Check className="h-4 w-4 mr-1" /> Enregistré</> : "Enregistrer"}
+            </Button>
+            <p className="text-xs text-muted-foreground basis-full">
+              Ce nom sera inclus dans les alertes WhatsApp et emails envoyés au support en cas de retard de synchronisation.
+            </p>
+          </CardContent>
+        </Card>
         <PendingQueueCard />
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
